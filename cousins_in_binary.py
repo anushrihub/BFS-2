@@ -59,3 +59,39 @@ class Solution:
                 return False
             
         return True
+
+# DFS:
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+class Solution:
+    def isCousins(self, root: TreeNode, x: int, y: int) -> bool:
+        self.x_level = -1
+        self.y_level = -1
+        self.x_parent = None
+        self.y_parent = None
+
+        def helper(node, level, parent):
+            # base case
+            if node is None:
+                return
+            # check if the current node is X
+            if node.val == x:
+                self.x_level = level
+                self.x_parent = parent
+            # check if the current node is Y
+            if node.val == y:
+                self.y_level = level
+                self.y_parent = parent
+            # if we dont found the match go deeper
+            if self.x_parent is None or self.y_parent is None:
+                helper(node.left, level + 1, node)
+            # if we dont found the match go deeper
+            if self.x_parent is None or self.y_parent is None:
+                helper(node.right, level + 1, node)
+
+        helper(root, 0, None)
+        return self.x_level == self.y_level and self.x_parent != self.y_parent
